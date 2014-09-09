@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <title>Калькуляьор on-line</title>
+    <script>
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function(a, b) {
+            if (ajax.readyState == 4 && ajax.status == 200) {
+                var response = JSON.parse(ajax.responseText);
+                if (response.success) {
+                    document.getElementById("error").innerHTML = '';
+                    document.getElementById("result").innerHTML = response.result;
+                } else {
+                    document.getElementById("result").innerHTML = '';
+                    document.getElementById("error").innerHTML = response.message;
+                }
+            }
+        };
+        function calc()
+        {
+            var data = document.getElementById("expr").value;
+            ajax.open('post', '/calc', true);
+            ajax.setRequestHeader("Content-Type", "text/plain");
+            ajax.send(data);
+        }
+    </script>
+
+    <style>
+        #result {
+            color: green;
+            font-weight: bold;
+        }
+
+        #error {
+            color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <label for="expr">Введите выражение: </label>
+    <input id="expr" type="text" width="300"/>
+    <button onclick="calc()">Посчитать</button>
+<hr>
+<div id="result"></div>
+<div id="error"></div>
+</body>
+</html>
